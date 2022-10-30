@@ -29,6 +29,12 @@
         color: red;
         font-size: 0.8rem;
     }
+    .btnWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
     .button {
         background-color: #f5f5f5;
         border: 1px solid #ccc;

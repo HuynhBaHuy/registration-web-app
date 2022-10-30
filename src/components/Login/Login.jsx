@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useForm, Controller } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import styles from './styles.module.scss';
@@ -15,7 +16,7 @@ function Login() {
     const onSubmit = (data) => {
         const { email, password } = data;
         console.log("Data", {
-            email,password
+            email, password
         });
         fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.login}`, {
             method: constants.apiConfig.methods.post,
@@ -27,10 +28,10 @@ function Login() {
             return response.json();
         }
         ).then((data) => {
-            if(data?.code === 200) {
-                console.log("Data receiver", data); 
+            if (data?.code === 200) {
+                console.log("Data receiver", data);
                 successModal("Login success", `Welcome User ${data?.data?.fullName}`);
-            }else {
+            } else {
                 failureModal("Login failed", data?.message ?? 'unknown message')
             }
         }).catch((error) => {
@@ -75,9 +76,9 @@ function Login() {
                 <button type="submit" className={styles.button} >
                     Login
                 </button>
-                <button type="submit" className={styles.button} >
+                <Link to='/register' type="submit" className={styles.button} >
                     Register
-                </button>
+                </Link>
             </div>
         </form>
     );

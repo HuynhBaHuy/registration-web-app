@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useForm, Controller } from "react-hook-form";
 import { UserOutlined, EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 import { Input } from 'antd';
 import styles from './styles.module.scss';
 import React from "react";
@@ -84,9 +85,14 @@ function Register() {
                         />} />
                 <span className={styles.message}>{errors?.password?.message}</span>
             </div>
-            <button type="submit" className={styles.button} >
-                Register
-            </button>
+            <div className={styles.btnWrapper}>
+                <button type="submit" className={styles.button} >
+                    Register
+                </button>
+                <Link to='/' className={styles.button} >
+                    Login
+                </Link>
+            </div>
         </form>
     );
 }
