@@ -2,9 +2,9 @@
 import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Input, Spin } from 'antd';
 import styles from './styles.module.scss';
-import React from "react";
+import React, { useState } from "react";
 import constants from "../../constants";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from "helpers/validate";
@@ -13,7 +13,9 @@ function Login() {
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema)
     });
+    const [loading, setLoading] = useState(false);
     const onSubmit = (data) => {
+        setLoading(true);
         const { email, password } = data;
         console.log("Data", {
             email, password
@@ -34,7 +36,9 @@ function Login() {
             } else {
                 failureModal("Login failed", data?.message ?? 'unknown message')
             }
+            setLoading(false);
         }).catch((error) => {
+            setLoading(false);
             console.error("Error", error);
             failureModal("Login failed", error.message);
         });
@@ -73,9 +77,11 @@ function Login() {
                 <span className={styles.message}>{errors?.password?.message}</span>
             </div>
             <div className={styles.btnWrapper}>
-                <button type="submit" className={styles.button} >
-                    Login
-                </button>
+                <Spin spinning={loading}>
+                    <button type="submit" className={styles.button} >
+                        Login
+                    </button>
+                </Spin>
                 <Link to='/register' type="submit" className={styles.button} >
                     Register
                 </Link>

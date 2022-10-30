@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Modal } from "antd";
-const timeOut = 5;
+const timeOut = 8;
 const options = {
     bodyStyle: {
         maxHeight: '400px',
