@@ -1,45 +1,47 @@
 // @ts-nocheck
 import { useForm, Controller } from "react-hook-form";
-import { UserOutlined, EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
+import { EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import styles from './styles.module.scss';
 import React from "react";
 import constants from "../../constants";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { registerSchema } from "helpers/validate";
+import { loginSchema } from "helpers/validate";
 import { failureModal, successModal } from "modals";
-function Register() {
+function Login() {
     const { handleSubmit, control, formState: { errors } } = useForm({
-        resolver: yupResolver(registerSchema)
+        resolver: yupResolver(loginSchema)
     });
     const onSubmit = (data) => {
-        const { fullName, email, password } = data;
-        console.log(fullName, email, password);
-        fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.register}`, {
+        const { email, password } = data;
+        console.log("Data", {
+            email,password
+        });
+        fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.login}`, {
             method: constants.apiConfig.methods.post,
             headers: {
                 "Content-type": "application/json"
             },
-            body: JSON.stringify({ fullName, email, password }),
+            body: JSON.stringify({ email, password }),
         }).then((response) => {
             return response.json();
         }
         ).then((data) => {
-            if (data?.code === 200) {
-                successModal("Register success", `Welcome User ${data?.data?.fullName}`);
-                console.log("Data receiver", data);
-            } else {
-                failureModal("Register Failed", data?.message ?? 'unknown message');
+            if(data?.code === 200) {
+                console.log("Data receiver", data); 
+                successModal("Login success", `Welcome User ${data?.data?.fullName}`);
+            }else {
+                failureModal("Login failed", data?.message ?? 'unknown message')
             }
         }).catch((error) => {
-            console.error("Error", error.message);
-            failureModal("Register failed", error.message)
+            console.error("Error", error);
+            failureModal("Login failed", error.message);
         });
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.formWrapper}>
-            <p className={styles.title}>Register Your Information</p>
+            <p className={styles.title}>Welcome To Authentication App</p>
             <div className={styles.inputWrapper}>
                 <Controller
                     name="email"
@@ -57,21 +59,6 @@ function Register() {
             <div className={styles.inputWrapper}>
 
                 <Controller
-                    name="fullName"
-                    control={control}
-                    render={({ field }) =>
-                        <Input
-                            {...field}
-                            className={styles.input}
-                            placeholder="Enter your name"
-                            size="large"
-                            prefix={<UserOutlined />}
-                        ></Input>} />
-                <span className={styles.message}>{errors?.fullName?.message}</span>
-            </div>
-            <div className={styles.inputWrapper}>
-
-                <Controller
                     name="password"
                     control={control}
                     render={({ field }) =>
@@ -84,10 +71,15 @@ function Register() {
                         />} />
                 <span className={styles.message}>{errors?.password?.message}</span>
             </div>
-            <button type="submit" className={styles.button} >
-                Register
-            </button>
+            <div className={styles.btnWrapper}>
+                <button type="submit" className={styles.button} >
+                    Login
+                </button>
+                <button type="submit" className={styles.button} >
+                    Register
+                </button>
+            </div>
         </form>
     );
 }
-export default Register;
+export default Login;

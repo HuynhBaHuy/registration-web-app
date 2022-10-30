@@ -7,6 +7,7 @@ const constants = {
         DOMAIN_NAME: 'http://localhost:3000',
         ENDPOINT: {
             register: '/users/register',
+            login: '/users/login'
         },
     }
 }
