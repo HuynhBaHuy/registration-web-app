@@ -11,14 +11,23 @@
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 1rem;
+        color: coral;
     }
-    
+    .inputWrapper {
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+    }
     .input {
         padding: 10px 20px;
-        margin-bottom: 20px;
         border: 1px solid #ccc;
         border-radius: 5px;
         width: 40vw;
+    }
+    .message {
+        text-align: left;
+        color: red;
+        font-size: 0.8rem;
     }
     .button {
         background-color: #f5f5f5;
