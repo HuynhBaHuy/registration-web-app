@@ -4,7 +4,7 @@ const constants = {
             get: 'GET',
             post: 'POST',
         },
-        DOMAIN_NAME: 'http://localhost:3000',
+        DOMAIN_NAME: 'https://authentication-alpha.vercel.app',
         ENDPOINT: {
             register: '/users/register',
             login: '/users/login'
