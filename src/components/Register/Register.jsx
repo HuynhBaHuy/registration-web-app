@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useForm, Controller } from "react-hook-form";
 import { UserOutlined, EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input, Spin } from 'antd';
 import styles from './styles.module.scss';
 import React, { useState } from "react";
@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema } from "helpers/validate";
 import { failureModal, successModal } from "modals";
 function Register() {
+    const navigate = useNavigate();
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(registerSchema)
     });
@@ -30,7 +31,7 @@ function Register() {
         ).then((data) => {
             if (data?.code === 200) {
                 successModal("Register success", `Welcome User ${data?.data?.fullName}`);
-                
+                navigate('/login');
             } else {
                 failureModal("Register Failed", data?.message ?? 'unknown message');
             }

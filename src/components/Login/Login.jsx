@@ -33,6 +33,7 @@ function Login() {
             if (data?.code === 200) {
                 console.log("Data receiver", data);
                 successModal("Login success", `Welcome User ${data?.data?.fullName}`);
+                
             } else {
                 failureModal("Login failed", data?.message ?? 'unknown message')
             }
