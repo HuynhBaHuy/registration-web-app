@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
 import { Input, Spin } from 'antd';
 import styles from './styles.module.scss';
-import React, { useState } from "react";
+import React from "react";
 import constants from "../../constants";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from "helpers/validate";

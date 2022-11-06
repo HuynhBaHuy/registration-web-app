@@ -4,7 +4,7 @@ import { UserOutlined, EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@a
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Spin } from 'antd';
 import styles from './styles.module.scss';
-import React, { useState } from "react";
+import React from "react";
 import constants from "../../constants";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema } from "helpers/validate";
@@ -40,7 +40,6 @@ function Register() {
             }
         });
     };
-
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.formWrapper}>
             <p className={styles.title}>Register Your Information</p>
