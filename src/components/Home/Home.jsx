@@ -26,7 +26,7 @@ function Home() {
         } else {
             mutation.mutate(token);
         }
-    }, []);
+    }, [navigate]);
 
     return (
         <div>
