@@ -32,8 +32,14 @@ function Register() {
         mutation.mutate(data, { 
             onSuccess: (data) => {
                 console.log(data);
-                successModal("Register successfully", "Register successfully");
-                navigate("/login");
+                if(data?.code === 200 && data?.data?.token){
+                    localStorage.setItem("token", data.data.token);
+                    successModal("Register successfully", `Welcome ${data?.data?.fullName}`);
+                    navigate("/");
+                }
+                else{
+                    failureModal("Register failed", data.message);
+                }
             },
             onError: (error) => {
                 failureModal("Register failed", error.message);
@@ -93,7 +99,7 @@ function Register() {
                         Register
                     </button>
                 </Spin>
-                <Link to='/' className={styles.button} >
+                <Link to='/login' className={styles.button} >
                     Login
                 </Link>
             </div>

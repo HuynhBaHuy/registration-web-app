@@ -7,7 +7,8 @@ const constants = {
         DOMAIN_NAME: 'https://authentication-alpha.vercel.app',
         ENDPOINT: {
             register: '/users/register',
-            login: '/users/login'
+            login: '/users/login',
+            profile: '/users/profile',
         },
     }
 }

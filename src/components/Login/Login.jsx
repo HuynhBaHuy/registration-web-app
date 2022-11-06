@@ -34,7 +34,13 @@ function Login() {
         mutation.mutate(data, {
             onSuccess: (data) => {
                 console.log(data);
-                successModal("Login successfully", `Welcome ${data?.data?.fullName}`);
+                if(data?.code===200 && data?.data?.token){
+                    localStorage.setItem("token", data.data.token);
+                    successModal("Login successfully", `Welcome ${data?.data?.fullName}`);
+                    navigate("/");
+                }else{
+                    failureModal("Login failed", data.message);
+                }
             },
             onError: (error) => {
                 failureModal("Login failed", error.message);
