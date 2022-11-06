@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useForm, Controller } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EyeTwoTone, EyeInvisibleOutlined, MailOutlined } from '@ant-design/icons';
 import { Input, Spin } from 'antd';
 import styles from './styles.module.scss';
@@ -9,18 +9,18 @@ import constants from "../../constants";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from "helpers/validate";
 import { failureModal, successModal } from "modals";
+import { useMutation } from "react-query";
 function Login() {
+    const navigate = useNavigate();
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema)
     });
-    const [loading, setLoading] = useState(false);
-    const onSubmit = (data) => {
-        setLoading(true);
+    const mutation = useMutation((data) => {
         const { email, password } = data;
         console.log("Data", {
             email, password
         });
-        fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.login}`, {
+        return fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.login}`, {
             method: constants.apiConfig.methods.post,
             headers: {
                 "Content-type": "application/json"
@@ -28,20 +28,17 @@ function Login() {
             body: JSON.stringify({ email, password }),
         }).then((response) => {
             return response.json();
-        }
-        ).then((data) => {
-            if (data?.code === 200) {
-                console.log("Data receiver", data);
-                successModal("Login success", `Welcome User ${data?.data?.fullName}`);
-                
-            } else {
-                failureModal("Login failed", data?.message ?? 'unknown message')
+        })
+    });
+    const onSubmit = (data) => {
+        mutation.mutate(data, {
+            onSuccess: (data) => {
+                console.log(data);
+                successModal("Login successfully", `Welcome ${data?.data?.fullName}`);
+            },
+            onError: (error) => {
+                failureModal("Login failed", error.message);
             }
-            setLoading(false);
-        }).catch((error) => {
-            setLoading(false);
-            console.error("Error", error);
-            failureModal("Login failed", error.message);
         });
     };
 
@@ -78,7 +75,7 @@ function Login() {
                 <span className={styles.message}>{errors?.password?.message}</span>
             </div>
             <div className={styles.btnWrapper}>
-                <Spin spinning={loading}>
+                <Spin spinning={mutation.isLoading}>
                     <button type="submit" className={styles.button} >
                         Login
                     </button>

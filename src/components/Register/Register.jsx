@@ -8,18 +8,17 @@ import React, { useState } from "react";
 import constants from "../../constants";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema } from "helpers/validate";
+import { useMutation } from "react-query";
 import { failureModal, successModal } from "modals";
 function Register() {
     const navigate = useNavigate();
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(registerSchema)
     });
-    const [loading, setLoading] = useState(false);
-    const onSubmit = (data) => {
-        setLoading(true)
+    const mutation = useMutation((data) => {
         const { fullName, email, password } = data;
         console.log(fullName, email, password);
-        fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.register}`, {
+        return fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.register}`, {
             method: constants.apiConfig.methods.post,
             headers: {
                 "Content-type": "application/json"
@@ -27,19 +26,18 @@ function Register() {
             body: JSON.stringify({ fullName, email, password }),
         }).then((response) => {
             return response.json();
-        }
-        ).then((data) => {
-            if (data?.code === 200) {
-                successModal("Register success", `Welcome User ${data?.data?.fullName}`);
-                navigate('/login');
-            } else {
-                failureModal("Register Failed", data?.message ?? 'unknown message');
+        })
+    });
+    const onSubmit = (data) => {
+        mutation.mutate(data, { 
+            onSuccess: (data) => {
+                console.log(data);
+                successModal("Register successfully", "Register successfully");
+                navigate("/login");
+            },
+            onError: (error) => {
+                failureModal("Register failed", error.message);
             }
-            setLoading(false)
-        }).catch((error) => {
-            setLoading(false)
-            console.error("Error", error.message);
-            failureModal("Register failed", error.message)
         });
     };
 
@@ -91,7 +89,7 @@ function Register() {
                 <span className={styles.message}>{errors?.password?.message}</span>
             </div>
             <div className={styles.btnWrapper}>
-                <Spin spinning={loading} >
+                <Spin spinning={mutation.isLoading} >
                     <button type="submit" className={styles.button} >
                         Register
                     </button>
