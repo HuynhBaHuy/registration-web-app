@@ -22,9 +22,6 @@ function Login() {
         });
         return fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.login}`, {
             method: constants.apiConfig.methods.post,
-            headers: {
-                "Content-type": "application/json"
-            },
             body: JSON.stringify({ email, password }),
         }).then((response) => {
             return response.json();

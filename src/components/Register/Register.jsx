@@ -19,10 +19,7 @@ function Register() {
         const { fullName, email, password } = data;
         console.log(fullName, email, password);
         return fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.register}`, {
-            method: constants.apiConfig.methods.post,
-            headers: {
-                "Content-type": "application/json"
-            },
+            method: constants.apiConfig.methods.post,  
             body: JSON.stringify({ fullName, email, password }),
         }).then((response) => {
             return response.json();
