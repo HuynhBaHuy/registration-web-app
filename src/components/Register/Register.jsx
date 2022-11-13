@@ -31,9 +31,9 @@ function Register() {
     const onSubmit = (data) => {
         mutation.mutate(data, { 
             onSuccess: (data) => {
-                console.log(data);
-                if(data?.code === 200 && data?.data?.token){
-                    localStorage.setItem("token", data.data.token);
+                console.log("registration ",data);
+                if(data?.code === 200 && data?.data?.session){
+                    localStorage.setItem("session", JSON.stringify(data?.data?.session));
                     successModal("Register successfully", `Welcome ${data?.data?.fullName}`);
                     navigate("/");
                 }

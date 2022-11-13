@@ -34,8 +34,8 @@ function Login() {
         mutation.mutate(data, {
             onSuccess: (data) => {
                 console.log(data);
-                if(data?.code===200 && data?.data?.token){
-                    localStorage.setItem("token", data.data.token);
+                if(data?.code===200 && data?.data?.session){
+                    localStorage.setItem("session", JSON.stringify(data?.data?.session));
                     successModal("Login successfully", `Welcome ${data?.data?.fullName}`);
                     navigate("/");
                 }else{

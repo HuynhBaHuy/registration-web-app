@@ -4,28 +4,21 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import constants from "../../constants";
+import { axiosPrivate } from "../../common/axiosPrivate";
 function Home() {
     const navigate = useNavigate();
 
     const queries = useQuery({
         queryKey: "users",
-        queryFn: () => {
-            const token = localStorage.getItem("token");
-            console.log("Token", token);
-            return fetch(`${constants.apiConfig.DOMAIN_NAME}${constants.apiConfig.ENDPOINT.profile}`, {
-                method: constants.apiConfig.methods.get,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-access-token": token
-                },
-            }).then((response) => {
-                return response.json();
-            })
+        queryFn: async () => {
+            const response = await axiosPrivate.get(`${constants.apiConfig.ENDPOINT.profile}`);
+            console.log("Response", response);
+            return response?.data || {};
         },
         onSuccess: (data) => {
-            if(data?.code===200){
+            if (data?.code === 200) {
                 console.log(data);
-            }else{
+            } else {
                 navigate("/login");
             }
         },
@@ -44,7 +37,7 @@ function Home() {
                     <p>Full name: {queries.data?.data?.fullName}</p>
                     <p>Email: {queries.data?.data?.email}</p>
                     <Button onClick={() => {
-                        localStorage.removeItem("token");
+                        localStorage.removeItem("session");
                         navigate("/login");
                     }}>Logout</Button>
                 </div>
