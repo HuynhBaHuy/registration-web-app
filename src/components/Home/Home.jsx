@@ -24,6 +24,7 @@ function Home() {
         },
         onError: (error) => {
             console.log("Error", error);
+            navigate("/login");
         }
     });
 
